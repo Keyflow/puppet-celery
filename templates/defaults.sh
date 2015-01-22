@@ -8,7 +8,7 @@ CELERYD_NODES="w1"
 CELERYD_CHDIR="/var/celery/"
 
 # Extra arguments to celeryd
-CELERYD_OPTS="--time-limit=300 --concurrency=8"
+CELERYD_OPTS="--time-limit=300 --concurrency=<%= @concurrency %>"
 
 # Name of the celery config module.
 CELERY_CONFIG_MODULE="celeryconfig"
@@ -20,3 +20,4 @@ CELERYD_PID_FILE="/var/run/celery/%n.pid"
 # Workers should run as an unprivileged user.
 CELERYD_USER="celery"
 CELERYD_GROUP="celery"
+PYTHONPATH=${PYTHONPATH}:<%= @venv %>

@@ -10,8 +10,9 @@ class celery::server($venv="system-wide",
                      $broker_password="CHANGEME",
                      $broker_host="localhost",
                      $broker_port="5672",
-		     $user="celery",
-		     $usergroup="celery") {
+                     $user="celery",
+                     $usergroup="celery",
+                     $concurrency = '8') {
 
   file { $requirements:
     ensure => "present",
