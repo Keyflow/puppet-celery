@@ -13,7 +13,7 @@ class celery::server($venv="system-wide",
                      $user="celery",
                      $usergroup="celery",
                      $concurrency = '8',
-                     $pypath_appendage = '';) {
+                     $pypath_appendage = '') {
 
   file { $requirements:
     ensure => "present",
