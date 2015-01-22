@@ -2,10 +2,6 @@ class celery::rabbitmq($user="some_user",
                        $vhost="some_vhost",
                        $password="CHANGEME") {
 
-  # rabbitmq module needs this
-  package {'curl':
-    ensure => present,
-  } ->
   class { '::rabbitmq':
     package_apt_pin => 900,
     # use this for the time being remove once working
