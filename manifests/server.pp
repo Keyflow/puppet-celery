@@ -32,29 +32,29 @@ class celery::server($venv="system-wide",
     mode => "0755",
   }
   
-  group { $usergroup:
-    ensure => present
-  }
+  #group { $usergroup:
+  #  ensure => present
+  #}
 
-  user { $user:
-    ensure => present,
-    gid    => $usergroup
-  } ->
+  #user { $user:
+  #  ensure => present,
+  #  gid    => $usergroup
+  #} ->
 
   file { "/var/celery":
-    ensure => "directory",
-    owner => "celery",
-    require => User["celery"],
+    ensure   => "directory",
+    owner    => $user
+    require  => User[$user]
   }
 
   file { "/var/log/celery":
     ensure => "directory",
-    owner => "celery",
+    owner  => $user
   }
 
   file { "/var/run/celery":
     ensure => "directory",
-    owner => "celery",
+    owner  => $user
   }
 
   python::requirements { $requirements:
