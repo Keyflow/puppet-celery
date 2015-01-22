@@ -43,7 +43,7 @@ class celery::server($venv="system-wide",
 
   file { "/var/celery":
     ensure   => "directory",
-    owner    => $user
+    owner    => $user,
     require  => User[$user]
   }
 
