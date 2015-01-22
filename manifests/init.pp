@@ -57,10 +57,12 @@ class celery::server($venv="system-wide",
     content => template($initd_template),
     mode => "0755",
   }
+  
+  group { $usergroup: }
 
   user { $user:
     ensure => "present",
-    groups => $usergroup
+    gid => $usergroup
   } ->
 
   file { "/var/celery":
