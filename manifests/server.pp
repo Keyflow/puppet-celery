@@ -12,7 +12,8 @@ class celery::server($venv="system-wide",
                      $broker_port="5672",
                      $user="celery",
                      $usergroup="celery",
-                     $concurrency = '8') {
+                     $concurrency = '8',
+                     $pypath_appendage = '';) {
 
   file { $requirements:
     ensure => "present",

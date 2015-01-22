@@ -20,4 +20,4 @@ CELERYD_PID_FILE="/var/run/celery/%n.pid"
 # Workers should run as an unprivileged user.
 CELERYD_USER="celery"
 CELERYD_GROUP="celery"
-PYTHONPATH=${PYTHONPATH}:<%= @venv %>
+PYTHONPATH=${PYTHONPATH}:<%= @pypath_appendage %>
