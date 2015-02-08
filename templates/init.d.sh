@@ -41,7 +41,7 @@ SCRIPT_NAME="$(basename "$SCRIPT_FILE")"
 DEFAULT_USER="celery"
 DEFAULT_PID_FILE="/var/run/celery/%n.pid"
 DEFAULT_LOG_FILE="/var/log/celery/%n.log"
-DEFAULT_LOG_LEVEL="INFO"
+DEFAULT_LOG_LEVEL="WARNING"
 DEFAULT_NODES="celery"
 DEFAULT_CELERYD="-m celery worker --detach"
 
