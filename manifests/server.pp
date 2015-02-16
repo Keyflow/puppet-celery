@@ -14,6 +14,7 @@ class celery::server($venv="system-wide",
                      $usergroup="celery",
                      $concurrency = '8',
                      $pypath_appendage = '',
+                     $environment_vars = {},
                      $extra_opts) {
 
   file { $requirements:
@@ -31,16 +32,7 @@ class celery::server($venv="system-wide",
     content => template($initd_template),
     mode => "0755",
   }
-  
-  #group { $usergroup:
-  #  ensure => present
-  #}
-
-  #user { $user:
-  #  ensure => present,
-  #  gid    => $usergroup
-  #} ->
-
+ 
   file { "/var/celery":
     ensure   => "directory",
     owner    => $user,
@@ -57,11 +49,6 @@ class celery::server($venv="system-wide",
     owner  => $user
   }
 
-  python::requirements { $requirements:
-    virtualenv => $venv,
-    owner => $venvowner,
-    group => $venvowner,
-  } ->
   service { "celeryd":
     hasrestart => true,
     ensure => "running",
