@@ -24,7 +24,7 @@ CELERYD_PID_FILE="/var/run/celery/%n.pid"
 CELERYD_USER="<%= @user %>"
 CELERYD_GROUP="<%= @usergroup %>"
 export PYTHONPATH=${PYTHONPATH}:<%= @pypath_appendage %>
-<% environment_vars.each_pair do |key, value| %>
+<% @environment_vars.each_pair do |key, value| %>
 export <%= key.upcase %>=<%= value %>
 <% end %>
 
