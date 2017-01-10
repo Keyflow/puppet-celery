@@ -1,4 +1,5 @@
-class celery::server($venv="/usr",
+class celery::server($python_env="/usr",
+                     $celery_env="/usr/local",
                      $proroot="",
                      $venvowner="root",
                      $requirements="/tmp/celery-requirements.txt",
