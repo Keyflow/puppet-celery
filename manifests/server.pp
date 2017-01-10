@@ -1,4 +1,4 @@
-class celery::server($venv="system-wide",
+class celery::server($venv="/usr",
                      $proroot="",
                      $venvowner="root",
                      $requirements="/tmp/celery-requirements.txt",
