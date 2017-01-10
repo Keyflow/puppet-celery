@@ -11,7 +11,7 @@ class celery::server($venv="system-wide",
                      $broker_host="localhost",
                      $broker_port="5672",
                      $user="celery",
-                     $usergroup="celery",
+                     $group="celery",
                      $concurrency = '8',
                      $pypath_appendage = '',
                      $environment_vars = {},
@@ -36,19 +36,19 @@ class celery::server($venv="system-wide",
   file { "/var/celery":
     ensure   => "directory",
     owner    => $user,
-    group    => $usergroup,
+    group    => $group,
   }
 
   file { "/var/log/celery":
     ensure => "directory",
     owner  => $user,
-    group  => $usergroup,
+    group  => $group,
   }
 
   file { "/var/run/celery":
     ensure => "directory",
     owner  => $user,
-    group  => $usergroup,
+    group  => $group,
   }
 
   service { "celeryd":
