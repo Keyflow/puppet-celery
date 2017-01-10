@@ -36,17 +36,19 @@ class celery::server($venv="system-wide",
   file { "/var/celery":
     ensure   => "directory",
     owner    => $user,
-    require  => User[$user]
+    group    => $usergroup,
   }
 
   file { "/var/log/celery":
     ensure => "directory",
-    owner  => $user
+    owner  => $user,
+    group  => $usergroup,
   }
 
   file { "/var/run/celery":
     ensure => "directory",
-    owner  => $user
+    owner  => $user,
+    group  => $usergroup,
   }
 
   service { "celeryd":
