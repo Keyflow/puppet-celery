@@ -49,10 +49,6 @@ class celery::server($python_env="/usr",
     mode => "0755",
   }
  
-  user { $user:
-    ensure     => 'present',
-    gid        => $group,
-  } ->
   file { "${celeryconfig_dir}":
     ensure   => "directory",
     owner    => $user,
