@@ -16,8 +16,8 @@ class celery::server($python_env="/usr",
                      $concurrency = '8',
                      $pypath_appendage = '',
                      $environment_vars = {},
+                     $celery_app = '',
                      $extra_opts) {
-
   file { $requirements:
     ensure => "present",
     content => template($requirements_template),

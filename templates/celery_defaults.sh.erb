@@ -13,6 +13,10 @@ ENV_PYTHON="<%= @python_env %>/bin/python"
 # Use local env copy of celery
 CELERY_BIN="<%= @celery_env %>/bin/celery"
 
+<% if @celery_app -%>
+CELERY_APP="<%= @celery_app %>"
+<% end -%>
+
 # Extra arguments to celeryd
 CELERYD_OPTS="--concurrency=<%= @concurrency %> <%= @extra_opts %>" #<% if @django_name != '' %> -A  <%= @django_name%><% end %>"
 
@@ -22,7 +26,7 @@ CELERYD_PID_FILE="/var/run/celery/%n.pid"
 
 # Workers should run as an unprivileged user.
 CELERYD_USER="<%= @user %>"
-CELERYD_GROUP="<%= @usergroup %>"
+CELERYD_GROUP="<%= @group %>"
 export PYTHONPATH=${PYTHONPATH}:<%= @pypath_appendage %>
 <% @environment_vars.each_pair do |key, value| %>
 export <%= key.upcase %>=<%= value %>
