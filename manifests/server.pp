@@ -60,7 +60,7 @@ class celery::server($python_env="/usr",
   } ->
   file { "${celeryconfig_dir}/celeryconfig.py":
     ensure  => "present",
-    content => template("celery/celeryconfig.py")
+    content => template("celery/celeryconfig.py"),
     owner   => $user,
     group   => $group,
   }
