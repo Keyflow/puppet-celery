@@ -18,7 +18,7 @@ CELERY_APP="<%= @celery_app %>"
 <% end -%>
 
 # Extra arguments to celeryd
-CELERYD_OPTS="--concurrency=<%= @concurrency %> <%= @extra_opts %>" #<% if @django_name != '' %> -A  <%= @django_name%><% end %>"
+CELERYD_OPTS="--concurrency=<%= @concurrency %> <%= @extra_opts %>"
 
 # %n will be replaced with the nodename.
 CELERYD_LOG_FILE="/var/log/celery/%n.log"
