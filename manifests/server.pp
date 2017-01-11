@@ -1,4 +1,5 @@
-class celery::server($python_env="/usr",
+class celery::server($version='4.0.2',
+                     $python_env="/usr",
                      $celery_env="/usr/local",
                      $proroot="",
                      $broker_prefix="amqp",
@@ -31,12 +32,19 @@ class celery::server($python_env="/usr",
   } else {
     include 'python'
   }
-  file { '/tmp/celery-requirements.txt':
-    ensure => "present",
-    content => template("celery/requirements.txt"),
+  python::pip { 'celery':
+    ensure => $version,
     require => Class['python'],
   } ->
-  python::requirements { '/tmp/celery-requirements.txt': }
+  service { "celeryd":
+    hasrestart => true,
+    ensure => "running",
+    require => [File["/etc/init.d/celeryd"],
+                File["/etc/default/celeryd"],
+                File["/var/log/celery"],
+                File["/var/run/celery"],
+                ],
+  }
 
   file { "/etc/default/celeryd":
     ensure => "present",
@@ -73,14 +81,5 @@ class celery::server($python_env="/usr",
     owner   => $user,
     group   => $group,
     require => User[$user],
-  }
-
-  service { "celeryd":
-    hasrestart => true,
-    ensure => "running",
-    require => [File["/etc/init.d/celeryd"],
-                File["/etc/default/celeryd"],
-                File["/var/log/celery"],
-                File["/var/run/celery"], ],
   }
 }
