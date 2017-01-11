@@ -43,6 +43,7 @@ class celery::server($version='4.0.2',
                 File["/etc/default/celeryd"],
                 File["/var/log/celery"],
                 File["/var/run/celery"],
+                File["${celeryconfig_dir}/celeryconfig.py"]
                 ],
   }
 
