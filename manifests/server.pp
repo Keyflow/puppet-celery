@@ -58,16 +58,12 @@ class celery::server($version='4.0.2',
     mode => "0755",
   }
  
-  file { "${celeryconfig_dir}":
-    ensure   => "directory",
-    owner    => $user,
-    group    => $group,
-  } ->
   file { "${celeryconfig_dir}/celeryconfig.py":
     ensure  => "present",
     content => template("celery/celeryconfig.py"),
     owner   => $user,
     group   => $group,
+    require => File["${celeryconfig_dir}"],
   }
 
   file { "/var/log/celery":
