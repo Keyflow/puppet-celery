@@ -61,7 +61,7 @@ class celery::server($version='4.0.2',
   if ! defined( User["${user}"] ) {
     user { "${user}":
       ensure     => 'present',
-      gid        => "${group}"
+      gid        => "${group}",
       managehome => true,
       require    => Class['python'],
     }
