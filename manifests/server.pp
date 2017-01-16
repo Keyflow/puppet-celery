@@ -57,7 +57,24 @@ class celery::server($version='4.0.2',
     content => template("celery/init.d.sh"),
     mode => "0755",
   }
- 
+
+  if ! defined( User["${user}"] ) {
+    user { "${user}":
+      ensure     => 'present',
+      gid        => "${group}"
+      managehome => true,
+      require    => Class['python'],
+    }
+  }
+  if ! defined( File["${celeryconfig_dir}"] ) {
+    file { "${celeryconfig_dir}":
+      ensure  => "directory",
+      owner   => $user,
+      group   => $group,
+      require => User["${user}"],
+    }
+  }
+
   file { "${celeryconfig_dir}/celeryconfig.py":
     ensure  => "present",
     content => template("celery/celeryconfig.py"),
