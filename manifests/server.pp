@@ -1,4 +1,5 @@
 class celery::server($version='4.0.2',
+                     $ensure='running',
                      $python_env="/usr",
                      $celery_env="/usr/local",
                      $proroot="",
@@ -38,7 +39,7 @@ class celery::server($version='4.0.2',
   } ->
   service { "celeryd":
     hasrestart => true,
-    ensure => "running",
+    ensure => $ensure,
     require => [File["/etc/init.d/celeryd"],
                 File["/etc/default/celeryd"],
                 File["/var/log/celery"],
