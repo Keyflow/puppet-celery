@@ -81,6 +81,7 @@ class celery::server($version='4.0.2',
     owner   => $user,
     group   => $group,
     require => File["${celeryconfig_dir}"],
+    mode    => '0640',
   }
 
   file { "/var/log/celery":
