@@ -12,6 +12,5 @@ class celery::beat(
     ensure  => "present",
     content => template("celery/init.beat.sh"),
     mode    => "0755",
-    require => User["${user}"],
   }
 }
