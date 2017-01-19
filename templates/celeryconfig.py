@@ -1,4 +1,4 @@
-broker_url = "<%= @broker_prefix %>://<% if @broker_user -%><%= @broker_user %><% if @broker_password -%>:<%= @broker_password %><% end -%><% end -%>@<%= @broker_hosts.join(',') %><% if @broker_suffix -%>/<%= @broker_suffix %><% end -%>"
+broker_url = "<%= @broker_prefix %>://<% if @broker_user -%><%= @broker_user %><% if @broker_password -%>:<%= @broker_password %><% end -%>@<% end -%><%= @broker_hosts.join(',') %><% if @broker_suffix -%>/<%= @broker_suffix %><% end -%>"
 <% if @backend_url -%>
 result_backend = "<%= @backend_url %>"
 <% else -%>
