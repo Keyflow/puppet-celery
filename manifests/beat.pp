@@ -1,7 +1,5 @@
 class celery::beat(
   $ensure="running",
-  $user="celery",
-  $group="celery",
 ) {
 
   service { "celerybeat":
@@ -14,8 +12,6 @@ class celery::beat(
     ensure  => "present",
     content => template("celery/init.beat.sh"),
     mode    => "0755",
-    owner   => $user,
-    group   => $group,
     require => User["${user}"],
   }
 }
