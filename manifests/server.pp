@@ -5,10 +5,9 @@ class celery::server($version='4.0.2',
                      $proroot="",
                      $broker_prefix="amqp",
                      $broker_user=undef,
-                     $broker_vhost=undef,
+                     $broker_suffix=undef,
                      $broker_password=undef,
-                     $broker_host="localhost",
-                     $broker_port=undef,
+                     $broker_hosts=["localhost"],
                      $backend_prefix="amqp",
                      $backend_user=undef,
                      $backend_suffix=undef,
@@ -39,12 +38,13 @@ class celery::server($version='4.0.2',
   service { "celeryd":
     hasrestart => true,
     ensure => $ensure,
-    require => [File["/etc/init.d/celeryd"],
-                File["/etc/default/celeryd"],
-                File["/var/log/celery"],
-                File["/var/run/celery"],
-                File["${celeryconfig_dir}/celeryconfig.py"]
+    require => [File["/var/log/celery"],
+                File["/var/run/celery"]
                 ],
+    subscribe => [File["/etc/init.d/celeryd"],
+                  File["/etc/default/celeryd"],
+                  File["${celeryconfig_dir}/celeryconfig.py"]
+                  ],
   }
 
   file { "/etc/default/celeryd":
