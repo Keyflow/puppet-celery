@@ -19,7 +19,9 @@ class celery::server($version='4.0.2',
                      $celeryconfig_dir = '/var/celery',
                      $concurrency = '8',
                      $pypath_appendage = '',
+                     $custom_defaults = {},
                      $environment_vars = {},
+                     $custom_config = {},
                      $celery_app = '',
                      $extra_opts='') {
   if ! defined('python') {
