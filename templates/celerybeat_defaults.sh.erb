@@ -1,1 +1,4 @@
 CELERYBEAT_OPTS="--schedule=<%= @celerybeat_schedule_file %>"
+<% @custom_defaults.keys.sort.each do |key| %>
+<%= key.upcase %>=<%= @custom_defaults[key] %>
+<% end %>

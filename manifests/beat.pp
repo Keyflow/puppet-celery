@@ -1,6 +1,7 @@
 class celery::beat(
   $ensure="running",
   $celerybeat_schedule_file="/var/run/celery/celerybeat-schedule",
+  $custom_defaults={},
 ) {
 
   service { "celerybeat":
