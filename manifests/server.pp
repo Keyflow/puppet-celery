@@ -62,14 +62,6 @@ class celery::server($version='4.0.2',
     mode => "0755",
   }
 
-  if $config_file_as_root {
-    $config_user = 'root'
-    $config_group = 'root'
-  } else {
-    $config_user = $user
-    $config_group = $group
-  }
-
   if ! defined( User["${user}"] ) {
     user { "${user}":
       ensure     => 'present',
@@ -84,16 +76,21 @@ class celery::server($version='4.0.2',
       owner   => $user,
       group   => $group,
       require => User["${user}"],
+    } ->
+    file { "${celeryconfig_dir}/${celeryconfig_file}":
+      ensure  => "present",
+      content => template("celery/celeryconfig.py"),
+      owner   => $user,
+      group   => $group,
+      require => File["${celeryconfig_dir}"],
+      mode    => '0640',
     }
-  }
-
-  file { "${celeryconfig_dir}/${celeryconfig_file}":
-    ensure  => "present",
-    content => template("celery/celeryconfig.py"),
-    owner   => $config_user,
-    group   => $config_group,
-    require => File["${celeryconfig_dir}"],
-    mode    => '0640',
+  } else {
+    file { "${celeryconfig_dir}/${celeryconfig_file}":
+      ensure  => "present",
+      content => template("celery/celeryconfig.py"),
+      mode    => '0640',
+    }
   }
 
   file { "/var/log/celery":
