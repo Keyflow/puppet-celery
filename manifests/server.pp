@@ -16,7 +16,9 @@ class celery::server($version='4.0.2',
                      $backend_url=undef,
                      $user="celery",
                      $group="celery",
+                     $config_file_as_root=false,
                      $celeryconfig_dir = '/var/celery',
+                     $celeryconfig_file = 'celeryconfig.py',
                      $concurrency = '8',
                      $pypath_appendage = '',
                      $custom_defaults = {},
@@ -45,7 +47,7 @@ class celery::server($version='4.0.2',
                 ],
     subscribe => [File["/etc/init.d/celeryd"],
                   File["/etc/default/celeryd"],
-                  File["${celeryconfig_dir}/celeryconfig.py"]
+                  File["${celeryconfig_dir}/${celeryconfig_file}"]
                   ],
   }
 
@@ -60,6 +62,14 @@ class celery::server($version='4.0.2',
     mode => "0755",
   }
 
+  if $config_file_as_root {
+    $config_user = 'root'
+    $config_group = 'root'
+  } else {
+    $config_user = $user
+    $config_group = $group
+  }
+
   if ! defined( User["${user}"] ) {
     user { "${user}":
       ensure     => 'present',
@@ -68,7 +78,7 @@ class celery::server($version='4.0.2',
       require    => Class['python'],
     }
   }
-  if ! defined( File["${celeryconfig_dir}"] ) {
+  if (! defined( File["${celeryconfig_dir}"] )) and ( ! $config_file_as_root ) {
     file { "${celeryconfig_dir}":
       ensure  => "directory",
       owner   => $user,
@@ -77,11 +87,11 @@ class celery::server($version='4.0.2',
     }
   }
 
-  file { "${celeryconfig_dir}/celeryconfig.py":
+  file { "${celeryconfig_dir}/${celeryconfig_file}":
     ensure  => "present",
     content => template("celery/celeryconfig.py"),
-    owner   => $user,
-    group   => $group,
+    owner   => $config_user,
+    group   => $config_group,
     require => File["${celeryconfig_dir}"],
     mode    => '0640',
   }

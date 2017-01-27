@@ -24,10 +24,17 @@ CELERYD_OPTS="--concurrency=<%= @concurrency %> <%= @extra_opts %>"
 CELERYD_LOG_FILE="/var/log/celery/%n.log"
 CELERYD_PID_FILE="/var/run/celery/%n.pid"
 
+<% if @config_file_as_root -%>
+# Please ensure to change in the app to an unprivileged user once the config is read.
+CELERYD_USER="root"
+CELERYD_GROUP="root"
+<% else -%>
 # Workers should run as an unprivileged user.
 CELERYD_USER="<%= @user %>"
 CELERYD_GROUP="<%= @group %>"
-export PYTHONPATH=${PYTHONPATH}:<%= @pypath_appendage %>
+<% end -%>
+
+export PYTHONPATH=${PYTHONPATH}:<%= @celeryconfig_dir %>:<%= @pypath_appendage %>
 <% @custom_defaults.keys.sort.each do |key| %>
 <%= key.upcase %>=<%= @custom_defaults[key] %>
 <% end %>
