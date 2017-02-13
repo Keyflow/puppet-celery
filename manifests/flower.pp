@@ -1,6 +1,7 @@
 class celery::flower(
   $version="latest",
   $ensure="running",
+  $url=undef,
   $custom_defaults=undef,
 ) {
 
@@ -15,6 +16,7 @@ class celery::flower(
   }
   python::pip { 'flower':
     ensure  => $version,
+    url     => $url,
     require => Class['python'],
   } ->
   service { "flower":
