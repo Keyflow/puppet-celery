@@ -149,22 +149,30 @@ _get_pids() {
     my_exitcode=0
 
     for pid_file in "$CELERYD_PID_DIR"/*.pid; do
-        local pid=`cat "$pid_file"`
-        local cleaned_pid=`echo "$pid" | sed -e 's/[^0-9]//g'`
-        if [ -z "$pid" ] || [ "$cleaned_pid" != "$pid" ]; then
-            echo "bad pid file ($pid_file)"
-            one_failed=true
-            my_exitcode=1
-        else
-            found_pids=1
-            echo "$pid"
+        local node=`basename "$pid_file" .pid`
+        local is_node_pid=
+        for CELERYD_NODE in ${CELERYD_NODES}; do
+            if [ "${CELERYD_NODE}" = "${node}" ]; then
+                is_node_pid=true
+            fi
+        done
+        if [ "$is_node_pid" ]; then
+            local pid=`cat "$pid_file"`
+            local cleaned_pid=`echo "$pid" | sed -e 's/[^0-9]//g'`
+            if [ -z "$pid" ] || [ "$cleaned_pid" != "$pid" ]; then
+                echo "bad pid file ($pid_file)"
+                one_failed=true
+                my_exitcode=1
+            else
+                found_pids=1
+                echo "$pid"
+            fi
         fi
-
+    done
     if [ $found_pids -eq 0 ]; then
         echo "${SCRIPT_NAME}: All nodes down"
         exit $my_exitcode
     fi
-    done
 }
 
 
@@ -239,19 +247,27 @@ check_status () {
     local one_failed=
     for pid_file in "$CELERYD_PID_DIR"/*.pid; do
         local node=`basename "$pid_file" .pid`
-        local pid=`cat "$pid_file"`
-        local cleaned_pid=`echo "$pid" | sed -e 's/[^0-9]//g'`
-        if [ -z "$pid" ] || [ "$cleaned_pid" != "$pid" ]; then
-            echo "bad pid file ($pid_file)"
-            one_failed=true
-        else
-            local failed=
-            kill -0 $pid 2> /dev/null || failed=true
-            if [ "$failed" ]; then
-                echo "${SCRIPT_NAME} (node $node) (pid $pid) is stopped, but pid file exists!"
+        local is_node_pid=
+        for CELERYD_NODE in ${CELERYD_NODES}; do
+            if [ "${CELERYD_NODE}" = "${node}" ]; then
+                is_node_pid=true
+            fi
+        done
+        if [ "$is_node_pid" ]; then
+            local pid=`cat "$pid_file"`
+            local cleaned_pid=`echo "$pid" | sed -e 's/[^0-9]//g'`
+            if [ -z "$pid" ] || [ "$cleaned_pid" != "$pid" ]; then
+                echo "bad pid file ($pid_file)"
                 one_failed=true
             else
-                echo "${SCRIPT_NAME} (node $node) (pid $pid) is running..."
+                local failed=
+                kill -0 $pid 2> /dev/null || failed=true
+                if [ "$failed" ]; then
+                    echo "${SCRIPT_NAME} (node $node) (pid $pid) is stopped, but pid file exists!"
+                    one_failed=true
+                else
+                    echo "${SCRIPT_NAME} (node $node) (pid $pid) is running..."
+                fi
             fi
         fi
     done
