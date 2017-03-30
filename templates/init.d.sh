@@ -254,6 +254,7 @@ check_status () {
             fi
         done
         if [ "$is_node_pid" ]; then
+            found_pids=1
             local pid=`cat "$pid_file"`
             local cleaned_pid=`echo "$pid" | sed -e 's/[^0-9]//g'`
             if [ -z "$pid" ] || [ "$cleaned_pid" != "$pid" ]; then
@@ -272,6 +273,10 @@ check_status () {
         fi
     done
 
+    if [ $found_pids -eq 0 ]; then
+        echo "${SCRIPT_NAME}: All nodes down"
+        exit 1
+    fi
     [ "$one_failed" ] && exit 1 || exit 0
 }
 
